@@ -20,12 +20,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**")
+        http.authorizeRequests(auth ->
+                auth.antMatchers("/api/**")
+                        .authenticated())
                 .oauth2ResourceServer(oauth ->
                     oauth.bearerTokenResolver(bearerTokenResolver)
-                        .jwt())
-                .oauth2ResourceServer(oauth ->
-                    oauth.bearerTokenResolver(bearerTokenResolver)
-                        .opaqueToken());
+                        .jwt());
     }
 }
