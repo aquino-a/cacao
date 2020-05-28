@@ -81,6 +81,7 @@
 				<version>1.6.0</version>
 				<executions>
 					<execution>
+						<id>build angular</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>exec</goal>
@@ -92,9 +93,8 @@
 					<arguments>
 						<argument>run-script</argument>
 						<argument>build</argument>
-						<argument>--prefix</argument>
-						<argument>../web</argument>
 					</arguments>
+					<workingDirectory>../web</workingDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -102,7 +102,7 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copy angular build</id>
 						<!-- here the phase you need -->
 						<phase>generate-resources</phase>
 						<goals>
