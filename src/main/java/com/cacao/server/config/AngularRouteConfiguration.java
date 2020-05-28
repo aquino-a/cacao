@@ -1,4 +1,4 @@
-package com.cacao.server.controller;
+package com.cacao.server.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
