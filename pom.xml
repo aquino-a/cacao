@@ -75,24 +75,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>com.github.eirslett</groupId>-->
-<!--				<artifactId>frontend-maven-plugin</artifactId>-->
-<!--				<version>1.10.0</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>build angular</id>-->
-<!--						<goals>-->
-<!--							<goal>npm</goal>-->
-<!--						</goals>-->
-<!--						<phase>generate-resources</phase>-->
-<!--						<configuration>-->
-<!--							<arguments>run-script build &#45;&#45;prefix ../web</arguments>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-
-<!--				</executions>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>npm</executable>
+					<arguments>
+						<argument>run-script</argument>
+						<argument>build</argument>
+						<argument>--prefix</argument>
+						<argument>../web</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
