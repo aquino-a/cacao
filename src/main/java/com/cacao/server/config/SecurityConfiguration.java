@@ -34,8 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(
                         (request, response, filterChain) -> {
                             var jwtAuth = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-                            var user = User.fromJwtAuthenticationToken(jwtAuth);
-                            SecurityContextHolder.getContext().setAuthentication(user);
+                            if(jwtAuth != null){
+                                var user = User.fromJwtAuthenticationToken(jwtAuth);
+                                SecurityContextHolder.getContext().setAuthentication(user);
+                            }
                             filterChain.doFilter(request, response);
                         }
                         , BearerTokenAuthenticationFilter.class);
