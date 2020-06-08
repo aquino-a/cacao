@@ -1,5 +1,6 @@
 package com.cacao.server.controller;
 
+import com.cacao.server.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -15,8 +16,7 @@ import java.security.Principal;
 public class TestController {
 
     @GetMapping("me")
-    public String whoAmi(@AuthenticationPrincipal JwtAuthenticationToken token){
-        var jwt = (Jwt) token.getPrincipal();
-        return jwt.getClaim("email");
+    public String whoAmi(@AuthenticationPrincipal User user){
+        return user.getEmail();
     }
 }
