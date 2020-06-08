@@ -5,11 +5,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.util.Collection;
 
+@Entity
 public class User implements Authentication {
 
+    @Id
     private String id;
     private String imgUrl;
     private String email;
@@ -62,27 +66,22 @@ public class User implements Authentication {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-
     @Override
     public Object getCredentials() {
         return credentials;
     }
-
     @Override
     public Object getDetails() {
         return details;
     }
-
     @Override
     public Object getPrincipal() {
         return principal;
     }
-
     @Override
     public boolean isAuthenticated() {
         return isAuthenticated;
     }
-
     @Override
     public void setAuthenticated(boolean b) throws IllegalArgumentException {
         this.isAuthenticated = b;
@@ -121,7 +120,4 @@ public class User implements Authentication {
 
         return user;
     }
-
-
-    //name, family name, email, id, picture
 }
