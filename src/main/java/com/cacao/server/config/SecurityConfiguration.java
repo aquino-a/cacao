@@ -1,6 +1,7 @@
 package com.cacao.server.config;
 
 import com.cacao.server.model.User;
+import com.cacao.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,16 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 
+import java.util.concurrent.CompletableFuture;
+
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     BearerTokenResolver bearerTokenResolver;
+
+    @Autowired
+    UserService userService;
 
     @Bean
     BearerTokenResolver bearerTokenResolver(){
@@ -33,13 +39,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .jwt())
                 .addFilterAfter(
                         (request, response, filterChain) -> {
-                            var jwtAuth = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-                            if(jwtAuth != null){
-                                var user = User.fromJwtAuthenticationToken(jwtAuth);
+                            var auth = SecurityContextHolder.getContext().getAuthentication();
+                            if(auth != null && auth instanceof JwtAuthenticationToken){
+                                var jwtAuth = (JwtAuthenticationToken) auth;
+                                        var user = User.fromJwtAuthenticationToken(jwtAuth);
                                 SecurityContextHolder.getContext().setAuthentication(user);
+                                CompletableFuture.runAsync(() -> userService.AddUser(user));
                             }
                             filterChain.doFilter(request, response);
                         }
                         , BearerTokenAuthenticationFilter.class);
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 }
