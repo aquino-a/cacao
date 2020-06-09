@@ -4,4 +4,6 @@ import com.cacao.server.model.User;
 
 public interface UserService {
     void AddUser(User user);
+
+    boolean exists(String to);
 }

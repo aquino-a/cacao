@@ -18,4 +18,9 @@ public class UserServiceImpl implements UserService {
         }
         //TODO can add picture update
     }
+
+    @Override
+    public boolean exists(String id) {
+        return userRepository.existsById(id);
+    }
 }

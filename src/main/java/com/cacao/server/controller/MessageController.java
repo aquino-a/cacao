@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @MessageMapping("/message")
@@ -19,10 +20,9 @@ public class MessageController {
     private MessageService messageService;
 
     @MessageMapping("/send")
-    @SendToUser("/api/topic/message")
     public Message sendMessage(Principal principal, Message message) {
         message.setFrom(principal.getName());
-        messageService.sendMessage(message);
+        CompletableFuture.runAsync(() -> messageService.sendMessage(message));
         return message;
     }
 }
