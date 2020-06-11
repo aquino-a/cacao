@@ -10,6 +10,6 @@ class IdTest {
     @Test
     void size() {
         var generated = Id.generateOne(8);
-        Assertions.assertThat(generated).isEqualTo(8);
+        Assertions.assertThat(generated.length()).isEqualTo(8);
     }
 }
