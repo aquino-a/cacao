@@ -1,9 +1,7 @@
 package com.cacao.server.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,8 +9,8 @@ public class Message {
 
     @Id
     private String id;
-    private String from;
-    private String to;
+    private String fromUser;
+    private String toUser;
     private String message;
     private LocalDateTime time;
     private boolean wasRead;
@@ -25,19 +23,19 @@ public class Message {
         this.id = id;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
     }
-    public String getFrom() {
-        return from;
-    }
-
-    public String getTo() {
-        return to;
+    public String getFromUser() {
+        return fromUser;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
     public String getMessage() {

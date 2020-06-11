@@ -23,12 +23,12 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public void sendMessage(Message message) {
-        if(!userService.exists(message.getTo()))
+        if(!userService.exists(message.getToUser()))
             return;
         setId(message);
         messageRepository.save(message);
-        simpMessagingTemplate.convertAndSendToUser(message.getFrom(), MESSAGE_DESTINATION, message);
-        simpMessagingTemplate.convertAndSendToUser(message.getTo(), MESSAGE_DESTINATION, message);
+        simpMessagingTemplate.convertAndSendToUser(message.getFromUser(), MESSAGE_DESTINATION, message);
+        simpMessagingTemplate.convertAndSendToUser(message.getToUser(), MESSAGE_DESTINATION, message);
     }
 
     private void setId(Message message) {
