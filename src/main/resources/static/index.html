@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/js/app.js"></script>
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">token</label>
+                    <input type="text" id="token" class="form-control" placeholder="Your token here..." value="eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ5MjcxMGE3ZmNkYjE1Mzk2MGNlMDFmNzYwNTIwYTMyYzg0NTVkZmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQ4MDI3MTk5OTI3OTUyOTYzMzIiLCJlbWFpbCI6ImJsYWNrdGVycmFwaW5AZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJWbGltb0tPdGZob0h3SHVkZ2xnWGJnIiwibmFtZSI6IkFsZXggQXF1aW5vIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hLS9BT2gxNEdpMzZ6aUxUQjdnQ1kyZWpFVVFwcU40YTUtSmIxV3QwSC1LZ1RFPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFsZXgiLCJmYW1pbHlfbmFtZSI6IkFxdWlubyIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNTkxODUxNzE1LCJleHAiOjE1OTE4NTUzMTV9.YyX8xD7D9LUQHXPx6RiDEGXmt-LC7lWI4ROHApHaLoNxn7NxNUqRIbUCfLUlVkokMnxxeyQDBGjI6H-YYJNcTTtLJ6Ag9_QbufHnlYH93NBjsf4Hk7I2XZSsIJSUe76GI1TZzeuQmLKpcmSfg-pB3EYt01A0U8SkKoHFyqSii-Dx1IvZNq2Bry0I7DS78DM76NyNh6NvPwzYRePg7ehDiYlJ_ihYKEpfMJE0g13e5dQtzAh3-Gi4oTqo84In614sJ5ZTzdp-dfsLvlUpFPfXwmVb4Pr4v9fVBmRoxAKZd4ManX4Q9doLhqVmCMW3bIe-4P15lxl-IJJixtZEVZNtAw">
+                    <br/>
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here..." value="114802719992795296332">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
