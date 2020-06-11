@@ -1,10 +1,14 @@
 package com.cacao.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 
     @Id

@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import java.security.Principal;
 import java.util.Collection;
 
 @Entity
@@ -17,18 +18,10 @@ public class User implements Authentication {
     private String id;
     private String imgUrl;
     private String email;
-    private String name;
+    private String realName;
 
     @Transient
-    private Collection<? extends GrantedAuthority> authorities;
-    @Transient
-    private Object credentials;
-    @Transient
-    private Object details;
-    @Transient
-    private Object principal;
-    @Transient
-    private boolean isAuthenticated;
+    private JwtAuthenticationToken token;
 
     public String getId() {
         return id;
@@ -54,53 +47,45 @@ public class User implements Authentication {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     @Override
+    public String getName() {
+        return token.getName();
+    }
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return token.getAuthorities();
     }
     @Override
     public Object getCredentials() {
-        return credentials;
+        return token.getCredentials();
     }
     @Override
     public Object getDetails() {
-        return details;
+        return token.getDetails();
     }
     @Override
     public Object getPrincipal() {
-        return principal;
+        return token.getPrincipal();
     }
     @Override
     public boolean isAuthenticated() {
-        return isAuthenticated;
+        return token.isAuthenticated();
     }
     @Override
     public void setAuthenticated(boolean b) throws IllegalArgumentException {
-        this.isAuthenticated = b;
+        token.setAuthenticated(b);
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public void setCredentials(Object credentials) {
-        this.credentials = credentials;
-    }
-
-    public void setDetails(Object details) {
-        this.details = details;
-    }
-
-    public void setPrincipal(Object principal) {
-        this.principal = principal;
+    public void setToken(JwtAuthenticationToken token) {
+        this.token = token;
     }
 
     public static User fromJwtAuthenticationToken(JwtAuthenticationToken token) {
@@ -108,15 +93,11 @@ public class User implements Authentication {
         var user = new User();
 
         user.setId(token.getName());
-        user.setAuthenticated(token.isAuthenticated());
         user.setEmail(jwt.getClaim("email"));
         user.setImgUrl(jwt.getClaim("picture"));
-        user.setName(jwt.getClaim("name"));
+        user.setRealName(jwt.getClaim("name"));
 
-        user.setAuthorities(token.getAuthorities());
-        user.setCredentials(token.getCredentials());
-        user.setDetails(token.getDetails());
-        user.setPrincipal(token.getPrincipal());
+        user.setToken(token);
 
         return user;
     }
