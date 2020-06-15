@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class MessageServiceImpl implements MessageService{
 
@@ -25,17 +27,31 @@ public class MessageServiceImpl implements MessageService{
     public void sendMessage(Message message) {
         if(!userService.exists(message.getToUser()))
             return;
+        setTime(message);
         setId(message);
         messageRepository.save(message);
         simpMessagingTemplate.convertAndSendToUser(message.getFromUser(), MESSAGE_DESTINATION, message);
-        simpMessagingTemplate.convertAndSendToUser(message.getToUser(), MESSAGE_DESTINATION, message);
+        if(!message.getToUser().equals(message.getFromUser())) {
+            simpMessagingTemplate.convertAndSendToUser(message.getToUser(), MESSAGE_DESTINATION, message);
+        }
+    }
+
+    @Override
+    public void sendUnreadMessages(String userId) {
+        var unreadMessages = messageRepository.findByToUserAndWasReadFalseOrderByTimeAsc(userId);
+        unreadMessages.forEach(message -> {
+            simpMessagingTemplate.convertAndSendToUser(message.getToUser(), MESSAGE_DESTINATION, message);
+        });
     }
 
     private void setId(Message message) {
         var id = generateId();
-        for (; messageRepository.existsById(id); id = generateId()) {
-        }
+        for (; messageRepository.existsById(id); id = generateId()) { }
         message.setId(id);
+    }
+
+    private void setTime(Message message) {
+        message.setTime(LocalDateTime.now());
     }
 
     public String generateId(){
