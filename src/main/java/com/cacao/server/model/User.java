@@ -5,11 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 public class User implements Authentication {
@@ -19,6 +18,9 @@ public class User implements Authentication {
     private String imgUrl;
     private String email;
     private String realName;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<User> friends;
 
     @Transient
     private JwtAuthenticationToken token;
@@ -53,6 +55,14 @@ public class User implements Authentication {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Set<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<User> friends) {
+        this.friends = friends;
     }
 
     @Override
