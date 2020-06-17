@@ -12,23 +12,22 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 @SpringBootApplication
 public class ServerApplication {
 
-
-	private static ApplicationListener<SessionConnectedEvent> connectedEventApplicationListener =
-			new ApplicationListener<SessionConnectedEvent>() {
-
-				@Autowired
-				private MessageService messageService;
-
-				@Override
-				public void onApplicationEvent(SessionConnectedEvent sessionConnectedEvent) {
-					var userId = sessionConnectedEvent.getUser().getName();
-					messageService.sendUnreadMessages(userId);
-				}
-			};
-
 	public static void main(String[] args) {
 		var ac = SpringApplication.run(ServerApplication.class, args);
+		var connectedEventApplicationListener = ac.getBean(SessionConnectedListener.class);
 		ac.addApplicationListener(connectedEventApplicationListener);
+	}
+
+	@Component
+	public static class SessionConnectedListener implements ApplicationListener<SessionConnectedEvent> {
+		@Autowired
+		private MessageService messageService;
+
+		@Override
+		public void onApplicationEvent(SessionConnectedEvent sessionConnectedEvent) {
+			var userId = sessionConnectedEvent.getUser().getName();
+			messageService.sendUnreadMessages(userId);
+		}
 	}
 
 
