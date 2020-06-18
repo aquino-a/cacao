@@ -28,6 +28,11 @@ public class UserController {
 
     @GetMapping("/friends")
     public ResponseEntity<Set<User>> friends(@AuthenticationPrincipal User user){
-        return ResponseEntity.ok(user.getFriends());
+        var optionalUser = userService.findUser(user.getId());
+        if(optionalUser.isPresent()){
+            return ResponseEntity.ok(optionalUser.get().getFriends());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

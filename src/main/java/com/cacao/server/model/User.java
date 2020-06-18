@@ -67,26 +67,32 @@ public class User implements Authentication {
         this.friends = friends;
     }
 
+    @JsonIgnore
     @Override
     public String getName() {
         return token.getName();
     }
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return token.getAuthorities();
     }
+    @JsonIgnore
     @Override
     public Object getCredentials() {
         return token.getCredentials();
     }
+    @JsonIgnore
     @Override
     public Object getDetails() {
         return token.getDetails();
     }
+    @JsonIgnore
     @Override
     public Object getPrincipal() {
         return token.getPrincipal();
     }
+    @JsonIgnore
     @Override
     public boolean isAuthenticated() {
         return token.isAuthenticated();

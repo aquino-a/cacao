@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,5 +38,10 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
             });
         });
+    }
+
+    @Override
+    public Optional<User> findUser(String id) {
+        return userRepository.findById(id);
     }
 }
