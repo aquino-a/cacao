@@ -9,5 +9,5 @@ public interface UserService {
 
     boolean exists(String to);
 
-    void addFriend(User user, String email);
+    void addFriend(String userId, String email);
 }

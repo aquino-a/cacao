@@ -28,16 +28,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addFriend(User user, String email) {
-        Set<User> friends = user.getFriends();
-        if(friends == null) {
-            friends = new HashSet<User>();
-            user.setFriends(friends);
-        }
-        var optionalFriend = userRepository.findByEmail(email);
-        if(optionalFriend.isPresent()){
-            friends.add(optionalFriend.get());
-            userRepository.save(user);
-        }
+    public void addFriend(String userId, String email) {
+        var optionalUser = userRepository.findById(userId);
+        optionalUser.ifPresent(user ->{
+            var optionalFriend = userRepository.findByEmail(email);
+            optionalFriend.ifPresent(friend ->{
+                user.getFriends().add(optionalFriend.get());
+                userRepository.save(user);
+            });
+        });
     }
 }

@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/friend/add")
     public ResponseEntity addFriend(@AuthenticationPrincipal User user, String email){
-        userService.addFriend(user, email);
+        userService.addFriend(user.getId(), email);
         return ResponseEntity.ok().build();
     }
 

@@ -1,5 +1,6 @@
 package com.cacao.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,6 +20,7 @@ public class User implements Authentication {
     private String email;
     private String realName;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     private Set<User> friends;
 
