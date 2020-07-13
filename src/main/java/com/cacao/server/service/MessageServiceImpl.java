@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MessageServiceImpl implements MessageService{
@@ -42,6 +43,11 @@ public class MessageServiceImpl implements MessageService{
         unreadMessages.forEach(message -> {
             simpMessagingTemplate.convertAndSendToUser(message.getToUser(), MESSAGE_DESTINATION, message);
         });
+    }
+
+    @Override
+    public List<Message> getMessages(String userId1, String userId2, LocalDateTime earlierThan) {
+        return messageRepository.findMessagesEarlierThan(userId1, userId2, earlierThan);
     }
 
     private void setId(Message message) {

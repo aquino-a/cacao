@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
@@ -21,5 +23,10 @@ public class MessageController {
         message.setFromUser(principal.getName());
         CompletableFuture.runAsync(() -> messageService.sendMessage(message));
         return message;
+    }
+
+    @MessageMapping("/")
+    public List<Message> getMessages(Principal principal, String userId2, LocalDateTime earlierThan){
+        return messageService.getMessages(principal.getName(), userId2, earlierThan);
     }
 }
