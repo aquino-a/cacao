@@ -12,7 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
@@ -49,7 +56,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             filterChain.doFilter(request, response);
                         }
                         , BearerTokenAuthenticationFilter.class);
+        http.cors(config ->{
+
+            //TODO wire in origin property
+            var configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+//            configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+
+            var source = new UrlBasedCorsConfigurationSource();
+            source.registerCorsConfiguration("/**", configuration);
+
+            config.configurationSource(source);
+        });
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
+
+
 }

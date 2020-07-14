@@ -10,6 +10,6 @@ import java.util.List;
 public interface MessageRepository extends CrudRepository<Message, String> {
     List<Message> findByToUserAndWasReadFalseOrderByTimeAsc(String toUser);
 
-    @Query("select m from Message where m.time < ?3 and ((m.toUser = ?1 and m.fromUser = ?2) or (m.toUser = ?2 and m.fromUser = ?1))")
+    @Query("select m from Message m where m.time < ?3 and ((m.toUser = ?1 and m.fromUser = ?2) or (m.toUser = ?2 and m.fromUser = ?1))")
     List<Message> findMessagesEarlierThan(String userId1, String userId2, LocalDateTime earlierThan);
 }
