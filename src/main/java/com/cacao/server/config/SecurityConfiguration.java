@@ -57,10 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     source.registerCorsConfiguration("/api/**", configuration);
                     source.registerCorsConfiguration("/**", allAllowedConfiguration);
 
-
-
                     config.configurationSource(source);
-
                 })
                 .oauth2ResourceServer(oauth ->
                     oauth.bearerTokenResolver(bearerTokenResolver)
@@ -70,28 +67,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             var auth = SecurityContextHolder.getContext().getAuthentication();
                             if(auth != null && auth instanceof JwtAuthenticationToken){
                                 var jwtAuth = (JwtAuthenticationToken) auth;
-                                        var user = User.fromJwtAuthenticationToken(jwtAuth);
+                                var user = User.fromJwtAuthenticationToken(jwtAuth);
                                 SecurityContextHolder.getContext().setAuthentication(user);
                                 CompletableFuture.runAsync(() -> userService.AddUser(user));
                             }
                             filterChain.doFilter(request, response);
                         }
                         , BearerTokenAuthenticationFilter.class);
-//        http.cors(config -> {
-//
-//            var allAllowedConfiguration = new CorsConfiguration();
-//            configuration.setAllowedOrigins(Arrays.asList("*"));
-//            configuration.setAllowedMethods(Arrays.asList("*"));
-//            configuration.setAllowedHeaders(Arrays.asList("*"));
-//
-//            var source = new UrlBasedCorsConfigurationSource();
-//            source.registerCorsConfiguration("*", allAllowedConfiguration);
-//
-//
-//
-//            config.configurationSource(source);
-//        });
-
 
         http.csrf().disable();
         http.headers().frameOptions().disable();
