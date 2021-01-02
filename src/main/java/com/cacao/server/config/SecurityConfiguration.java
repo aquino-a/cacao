@@ -41,6 +41,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(auth ->
                 auth.antMatchers("/api/**")
                         .authenticated())
+                .cors(config -> {
+                    //TODO wire in origin property
+                    var configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:8080"));
+                    configuration.setAllowedMethods(Arrays.asList("*"));
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+
+                    var allAllowedConfiguration = new CorsConfiguration();
+                    allAllowedConfiguration.setAllowedOrigins(Arrays.asList("*"));
+                    allAllowedConfiguration.setAllowedMethods(Arrays.asList("*"));
+                    allAllowedConfiguration.setAllowedHeaders(Arrays.asList("*"));
+
+                    var source = new UrlBasedCorsConfigurationSource();
+                    source.registerCorsConfiguration("/api/**", configuration);
+                    source.registerCorsConfiguration("/**", allAllowedConfiguration);
+
+
+
+                    config.configurationSource(source);
+
+                })
                 .oauth2ResourceServer(oauth ->
                     oauth.bearerTokenResolver(bearerTokenResolver)
                         .jwt())
@@ -56,18 +77,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             filterChain.doFilter(request, response);
                         }
                         , BearerTokenAuthenticationFilter.class);
-        http.cors(config ->{
+//        http.cors(config -> {
+//
+//            var allAllowedConfiguration = new CorsConfiguration();
+//            configuration.setAllowedOrigins(Arrays.asList("*"));
+//            configuration.setAllowedMethods(Arrays.asList("*"));
+//            configuration.setAllowedHeaders(Arrays.asList("*"));
+//
+//            var source = new UrlBasedCorsConfigurationSource();
+//            source.registerCorsConfiguration("*", allAllowedConfiguration);
+//
+//
+//
+//            config.configurationSource(source);
+//        });
 
-            //TODO wire in origin property
-            var configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-//            configuration.setAllowedMethods(Arrays.asList("GET","POST"));
 
-            var source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", configuration);
-
-            config.configurationSource(source);
-        });
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }

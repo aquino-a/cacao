@@ -154,7 +154,7 @@
 							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
 							<resources>
 								<resource>
-									<directory>../web/dist/web</directory>
+									<directory>../web/dist/cacao-web</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
