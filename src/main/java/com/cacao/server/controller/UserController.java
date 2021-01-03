@@ -29,7 +29,7 @@ public class UserController {
         if(optionalUser.isPresent()){
             return ResponseEntity.ok(optionalUser.get().getFriends());
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 }

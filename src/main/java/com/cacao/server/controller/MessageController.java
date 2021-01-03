@@ -4,6 +4,7 @@ import com.cacao.server.model.Message;
 import com.cacao.server.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -25,8 +26,9 @@ public class MessageController {
         return message;
     }
 
-    @MessageMapping("/")
-    public List<Message> getMessages(Principal principal, String userId2, LocalDateTime earlierThan){
-        return messageService.getMessages(principal.getName(), userId2, earlierThan);
-    }
+//    @MessageMapping("/")
+//    @SendToUser("/api/topic/message")
+//    public List<Message> getMessages(Principal principal, String userId2, LocalDateTime earlierThan){
+//        return messageService.getMessages(principal.getName(), userId2, earlierThan);
+//    }
 }
