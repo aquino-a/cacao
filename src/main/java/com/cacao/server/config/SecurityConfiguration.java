@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,9 +36,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
+//    @Bean
+//    BearerTokenResolver bearerTokenResolver(){
+//      return request -> request.getParameter("token");
+//    }
+//
     @Bean
     BearerTokenResolver bearerTokenResolver(){
-      return request -> request.getParameter("token");
+        var btr = new DefaultBearerTokenResolver();
+        btr.setAllowFormEncodedBodyParameter(true);
+        btr.setAllowUriQueryParameter(true);
+        return btr;
     }
 
     @Override
