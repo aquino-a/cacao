@@ -1,5 +1,6 @@
 package com.cacao.server.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -20,6 +21,9 @@ import java.util.Map;
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
+    @Value("${cors.allowedOrigins:http://localhost:4200,http://localhost:8080}")
+    private String[] allowedOrigins;
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/api/topic");
@@ -28,7 +32,9 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/ws").withSockJS();
+        registry.addEndpoint("/api/ws")
+                .setAllowedOrigins(allowedOrigins)
+                .withSockJS();
     }
 }
 
