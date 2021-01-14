@@ -1,18 +1,16 @@
 package com.cacao.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import javax.persistence.*;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.Set;
 
 @Entity
-public class User implements Authentication {
+public class User extends AbstractAuthenticationToken {
 
     @Id
     private String id;
@@ -25,7 +23,11 @@ public class User implements Authentication {
     private Set<User> friends;
 
     @Transient
-    private JwtAuthenticationToken token;
+    private Jwt token;
+
+    public User(Collection<GrantedAuthority> authorities) {
+        super(authorities);
+    }
 
     public String getId() {
         return id;
@@ -70,52 +72,52 @@ public class User implements Authentication {
     @JsonIgnore
     @Override
     public String getName() {
-        return token.getName();
+        return id;
     }
     @JsonIgnore
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return token.getAuthorities();
+    public Collection<GrantedAuthority> getAuthorities() {
+        return super.getAuthorities();
     }
     @JsonIgnore
     @Override
     public Object getCredentials() {
-        return token.getCredentials();
+        return token;
     }
     @JsonIgnore
     @Override
     public Object getDetails() {
-        return token.getDetails();
+        return super.getDetails();
     }
     @JsonIgnore
     @Override
     public Object getPrincipal() {
-        return token.getPrincipal();
+        return token;
     }
     @JsonIgnore
     @Override
     public boolean isAuthenticated() {
-        return token.isAuthenticated();
+        return super.isAuthenticated();
     }
     @Override
     public void setAuthenticated(boolean b) throws IllegalArgumentException {
-        token.setAuthenticated(b);
+        super.setAuthenticated(b);
     }
 
-    public void setToken(JwtAuthenticationToken token) {
+    public void setToken(Jwt token) {
         this.token = token;
     }
 
-    public static User fromJwtAuthenticationToken(JwtAuthenticationToken token) {
-        var jwt = (Jwt) token.getPrincipal();
-        var user = new User();
+    public static User fromJwt(Jwt jwt, Collection<GrantedAuthority> authorities) {
+        var user = new User(authorities);
+        user.setAuthenticated(true);
 
-        user.setId(token.getName());
+        user.setId(jwt.getSubject());
         user.setEmail(jwt.getClaim("email"));
         user.setImgUrl(jwt.getClaim("picture"));
         user.setRealName(jwt.getClaim("name"));
 
-        user.setToken(token);
+        user.setToken(jwt);
 
         return user;
     }

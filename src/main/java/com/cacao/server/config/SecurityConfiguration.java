@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
@@ -22,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
@@ -36,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
-//    @Bean
+    //    @Bean
 //    BearerTokenResolver bearerTokenResolver(){
 //      return request -> request.getParameter("token");
 //    }
@@ -49,6 +55,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return btr;
     }
 
+    Converter<Jwt,? extends AbstractAuthenticationToken> jwtAuthenticationConverter = new Converter<Jwt, AbstractAuthenticationToken>() {
+
+        private Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+
+        @Override
+        public AbstractAuthenticationToken convert(Jwt jwt) {
+            var user = User.fromJwt(jwt, jwtGrantedAuthoritiesConverter.convert(jwt));
+            CompletableFuture.runAsync(() -> userService.AddUser(user));
+            return user;
+        }
+    };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(auth ->
@@ -59,19 +77,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 })
                 .oauth2ResourceServer(oauth ->
                     oauth.bearerTokenResolver(bearerTokenResolver)
-                        .jwt())
-                .addFilterAfter(
-                        (request, response, filterChain) -> {
-                            var auth = SecurityContextHolder.getContext().getAuthentication();
-                            if(auth != null && auth instanceof JwtAuthenticationToken){
-                                var jwtAuth = (JwtAuthenticationToken) auth;
-                                var user = User.fromJwtAuthenticationToken(jwtAuth);
-                                SecurityContextHolder.getContext().setAuthentication(user);
-                                CompletableFuture.runAsync(() -> userService.AddUser(user));
-                            }
-                            filterChain.doFilter(request, response);
-                        }
-                        , BearerTokenAuthenticationFilter.class);
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+                ;
 
         http.csrf().disable();
         http.headers().frameOptions().disable();
