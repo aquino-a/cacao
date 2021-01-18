@@ -25,6 +25,8 @@ public class User extends AbstractAuthenticationToken {
     @Transient
     private Jwt token;
 
+    public User(){ super(null); }
+
     public User(Collection<GrantedAuthority> authorities) {
         super(authorities);
     }
