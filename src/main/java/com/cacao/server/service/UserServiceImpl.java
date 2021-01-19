@@ -4,6 +4,7 @@ import com.cacao.server.model.User;
 import com.cacao.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsById(id);
     }
 
+    @Transactional
     @Override
     public void addFriend(String userId, String email) {
         var optionalUser = userRepository.findById(userId);
@@ -35,7 +37,6 @@ public class UserServiceImpl implements UserService {
             var optionalFriend = userRepository.findByEmail(email);
             optionalFriend.ifPresent(friend ->{
                 user.getFriends().add(optionalFriend.get());
-                userRepository.save(user);
             });
         });
     }
