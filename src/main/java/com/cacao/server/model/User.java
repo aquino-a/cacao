@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class User extends AbstractAuthenticationToken {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
-    private Set<User> friends;
+    private Set<User> friends = new HashSet<>();
 
     @Transient
     private Jwt token;
