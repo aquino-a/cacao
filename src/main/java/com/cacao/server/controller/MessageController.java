@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -25,6 +26,12 @@ public class MessageController {
         CompletableFuture.runAsync(() -> messageService.sendMessage(message));
         return message;
     }
+
+    @MessageMapping("/read")
+    public void readMessage(Principal principal, String messageId) {
+        CompletableFuture.runAsync(() -> messageService.markAsRead(messageId));
+    }
+
 
 //    @MessageMapping("/")
 //    @SendToUser("/api/topic/message")

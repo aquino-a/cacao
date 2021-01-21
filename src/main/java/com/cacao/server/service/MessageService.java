@@ -11,4 +11,6 @@ public interface MessageService {
     void sendUnreadMessages(String userId);
 
     List<Message> getMessages(String userId, String userId2, LocalDateTime laterThan);
+
+    void markAsRead(String messageId);
 }

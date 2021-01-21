@@ -6,6 +6,7 @@ import com.cacao.server.utlity.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -49,6 +50,12 @@ public class MessageServiceImpl implements MessageService{
     @Override
     public List<Message> getMessages(String userId1, String userId2, LocalDateTime earlierThan) {
         return messageRepository.findMessagesEarlierThan(userId1, userId2, earlierThan);
+    }
+
+    @Transactional
+    @Override
+    public void markAsRead(String messageId) {
+        messageRepository.markAsRead(messageId);
     }
 
     private void setId(Message message) {
