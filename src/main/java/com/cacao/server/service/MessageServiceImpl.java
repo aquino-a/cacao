@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -57,7 +58,7 @@ public class MessageServiceImpl implements MessageService{
     }
 
     private void setTime(Message message) {
-        message.setTime(LocalDateTime.now());
+        message.setTime(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     public String generateId(){
