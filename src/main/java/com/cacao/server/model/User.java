@@ -21,7 +21,7 @@ public class User extends AbstractAuthenticationToken {
     private String realName;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> friends = new HashSet<>();
 
     @Transient
