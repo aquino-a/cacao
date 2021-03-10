@@ -6,33 +6,29 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @SpringBootApplication
 public class ServerApplication {
 
+	@Autowired
+	private MessageService messageService;
+
 	public static void main(String[] args) {
-		var ac = SpringApplication.run(ServerApplication.class, args);
-		var connectedEventApplicationListener = ac.getBean(SessionConnectedListener.class);
-		ac.addApplicationListener(connectedEventApplicationListener);
+		SpringApplication.run(ServerApplication.class, args);
 	}
 
-	@Component
-	public static class SessionConnectedListener implements ApplicationListener<SessionConnectedEvent> {
-		@Autowired
-		private MessageService messageService;
-
-		@Override
-		public void onApplicationEvent(SessionConnectedEvent sessionConnectedEvent) {
-			var userId = sessionConnectedEvent.getUser().getName();
+	@EventListener
+	public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
+		var message = (GenericMessage) event.getMessage();
+		var simpDestination = (String) message.getHeaders().get("simpDestination");
+		if (simpDestination.startsWith("/user/api/topic/message")) {
+			var userId = event.getUser().getName();
 			messageService.sendUnreadMessages(userId);
 		}
 	}
-
-
-
-
-
-
 }
