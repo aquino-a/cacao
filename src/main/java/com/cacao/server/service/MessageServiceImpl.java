@@ -2,6 +2,7 @@ package com.cacao.server.service;
 
 import com.cacao.server.model.Message;
 import com.cacao.server.repository.MessageRepository;
+import com.cacao.server.repository.MessageRepositoryCustom;
 import com.cacao.server.utlity.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -17,6 +18,10 @@ public class MessageServiceImpl implements MessageService{
 
     @Autowired
     MessageRepository messageRepository;
+
+    @Autowired
+    MessageRepositoryCustom messageRepositoryCustom;
+
 
     @Autowired
     UserService userService;
@@ -49,7 +54,7 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public List<Message> getMessages(String userId1, String userId2, LocalDateTime earlierThan) {
-        return messageRepository.findMessagesEarlierThan(userId1, userId2, earlierThan);
+        return messageRepositoryCustom.findMessagesEarlierThan(userId1, userId2, earlierThan);
     }
 
     @Transactional
