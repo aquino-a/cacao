@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Value("user.ownerId")
+    @Value("${user.ownerId}")
     String ownerId;
 
     @Transactional
