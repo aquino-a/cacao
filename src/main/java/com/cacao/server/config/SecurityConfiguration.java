@@ -42,11 +42,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
-    //    @Bean
-//    BearerTokenResolver bearerTokenResolver(){
-//      return request -> request.getParameter("token");
-//    }
-//
     @Bean
     BearerTokenResolver bearerTokenResolver(){
         var btr = new DefaultBearerTokenResolver();
@@ -62,7 +57,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         public AbstractAuthenticationToken convert(Jwt jwt) {
             var user = User.fromJwt(jwt, jwtGrantedAuthoritiesConverter.convert(jwt));
-            CompletableFuture.runAsync(() -> userService.AddUser(user));
             return user;
         }
     };

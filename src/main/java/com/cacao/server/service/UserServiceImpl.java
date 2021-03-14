@@ -1,5 +1,6 @@
 package com.cacao.server.service;
 
+import com.cacao.server.model.Message;
 import com.cacao.server.model.User;
 import com.cacao.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    MessageService messageService;
 
     @Autowired
     UserRepository userRepository;
@@ -28,9 +34,20 @@ public class UserServiceImpl implements UserService {
             u.getFriends().add(u);
 
             var owner = userRepository.findById(ownerId);
-            owner.ifPresent(o -> u.getFriends().add(o));
+            owner.ifPresent(o -> {
+                u.getFriends().add(o);
+                sendWelcome(u.getId());
+            });
         }
         //TODO can add picture update
+    }
+
+    private void sendWelcome(String id) {
+        var msg = new Message();
+        msg.setFromUser(ownerId);
+        msg.setToUser(id);
+        msg.setMessage("Welcome to my chat app!");
+        messageService.sendMessage(msg);
     }
 
     @Override
