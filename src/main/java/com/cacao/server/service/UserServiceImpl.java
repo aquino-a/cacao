@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
             owner.ifPresent(o -> {
                 u.getFriends().add(o);
                 sendWelcome(u.getId());
+                o.getFriends().add(u);
             });
         }
         //TODO can add picture update
