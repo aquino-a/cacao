@@ -26,6 +26,12 @@ public class AuthenticationController {
     @Autowired
     private JwtDecoder jwtDecoder;
 
+    /**
+     * Takes a google authentication code and retrieves the token from google using the server's client id/secret.
+     *
+     * @param authCode
+     * @return
+     */
     @GetMapping("/google")
     public ResponseEntity<Tokens> googleToken(@RequestParam String authCode){
         var tokens = authenticationService.retrieveTokens(authCode);

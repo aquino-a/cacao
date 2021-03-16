@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Used for authentication as well as to represent users of the app.
+ */
 @Entity
 public class User extends AbstractAuthenticationToken {
 

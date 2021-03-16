@@ -10,6 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Prepares Beans and properties needed for handling authentication with google.
+ */
 @Configuration
 public class GoogleTokenConfiguration {
 

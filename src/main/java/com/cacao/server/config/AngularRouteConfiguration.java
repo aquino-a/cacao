@@ -9,6 +9,10 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
 
+
+/**
+ * Configures server to serve static angular app
+ */
 @Configuration
 public class AngularRouteConfiguration implements WebMvcConfigurer {
 

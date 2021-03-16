@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+/**
+ * Model that represents message to and from users.
+ */
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {

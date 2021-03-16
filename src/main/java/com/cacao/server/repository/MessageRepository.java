@@ -8,6 +8,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * MessageRepository with auto generated methods.
+ */
 public interface MessageRepository extends CrudRepository<Message, String> {
     List<Message> findByToUserAndWasReadFalseOrderByTimeAsc(String toUser);
 

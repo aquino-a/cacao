@@ -14,6 +14,9 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Rest api for handling messages.
+ */
 @RestController
 @RequestMapping("/api/message")
 public class MessageRestController {

@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Websocket endpoints for handling messages.
+ */
 @Controller
 @MessageMapping("/message")
 public class MessageController {
@@ -31,11 +34,4 @@ public class MessageController {
     public void readMessage(Principal principal, String messageId) {
         CompletableFuture.runAsync(() -> messageService.markAsRead(messageId));
     }
-
-
-//    @MessageMapping("/")
-//    @SendToUser("/api/topic/message")
-//    public List<Message> getMessages(Principal principal, String userId2, LocalDateTime earlierThan){
-//        return messageService.getMessages(principal.getName(), userId2, earlierThan);
-//    }
 }

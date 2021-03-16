@@ -1,5 +1,8 @@
 package com.cacao.server.model;
 
+/**
+ * Represents the relevant tokens recieved by google oauth
+ */
 public class Tokens{
     private String accessToken, idToken;
 

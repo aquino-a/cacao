@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Rest api for handling friends and other user related requests.
+ */
 @RestController
 @RequestMapping("/api")
 public class UserController {
