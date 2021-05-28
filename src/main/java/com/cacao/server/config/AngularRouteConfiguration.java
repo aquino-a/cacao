@@ -1,8 +1,10 @@
 package com.cacao.server.config;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,12 @@ import java.io.IOException;
  */
 @Configuration
 public class AngularRouteConfiguration implements WebMvcConfigurer {
+
+    @Value("${server.port.http:8080}")
+        int httpPort;
+
+    @Value("${server.port:8443}")
+        int httpsPort;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -53,6 +61,16 @@ public class AngularRouteConfiguration implements WebMvcConfigurer {
                 context.addConstraint(securityConstraint);
             }
         };
+        tomcat.addAdditionalTomcatConnectors(redirectConnector());
         return tomcat;
+    }
+
+    private Connector redirectConnector() {
+        Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+        connector.setScheme("http");
+        connector.setPort(httpPort);
+        connector.setSecure(false);
+        connector.setRedirectPort(httpsPort);
+        return connector;
     }
 }
