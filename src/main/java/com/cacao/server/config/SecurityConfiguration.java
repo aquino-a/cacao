@@ -2,8 +2,13 @@ package com.cacao.server.config;
 
 import com.cacao.server.model.User;
 import com.cacao.server.service.UserService;
+import org.apache.catalina.Context;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -98,5 +103,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+        var tomcat = new TomcatServletWebServerFactory() {
+            @Override
+            protected void postProcessContext(Context context) {
+                SecurityConstraint securityConstraint = new SecurityConstraint();
+                securityConstraint.setUserConstraint("CONFIDENTIAL");
 
+                var collection = new SecurityCollection();
+                collection.addPattern("/*");
+                securityConstraint.addCollection(collection);
+                context.addConstraint(securityConstraint);
+            }
+        };
+        return tomcat;
+    }
 }
