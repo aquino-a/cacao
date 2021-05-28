@@ -102,21 +102,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return source;
     }
-
-    @Bean
-    public ServletWebServerFactory servletContainer() {
-        var tomcat = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-
-                var collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
-        return tomcat;
-    }
 }
