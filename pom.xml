@@ -133,8 +133,17 @@
 							<workingDirectory>../cacao-web</workingDirectory>
 						</configuration>
 					</execution>
+					<execution>
+						<id>build image</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>build-image.sh</executable>
+						</configuration>
+					</execution>
 				</executions>
-
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
