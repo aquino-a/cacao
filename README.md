@@ -2,7 +2,7 @@
 ## _Messaging App_
 
 
-Cacao is a clone of a Korean chat app called Kakao.
+Cacao is a messaging app inpired by the Korean chat app, Kakao.
  This is the backend of the application.
  It was made using various [Spring](https://spring.io/projects/spring-boot) projects,
  [H2 Database](http://h2database.com/html/main.html),
