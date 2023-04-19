@@ -1,9 +1,7 @@
-microcontainer=$(buildah from registry.fedoraproject.org/eclipse-temurin:17-jdk-alpine)
+microcontainer=$(buildah from docker.io/library/eclipse-temurin:17-jre-alpine)
 micromount=$(buildah mount $microcontainer)
 
-buildah copy $microcontainer './target/blah.jar' '/home/cacao/app.jar'
-
-npm install --prefix $micromount/home/comment-delete
+buildah copy $microcontainer './target/server-0.0.1-SNAPSHOT.jar' '/home/cacao/app.jar'
 
 buildah config --cmd "java -jar /home/cacao/app.jar" $microcontainer
 
