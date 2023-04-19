@@ -128,7 +128,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<argument>run-script</argument>
-								<argument>build</argument>
+								<argument>build-prod</argument>
 							</arguments>
 							<workingDirectory>../cacao-web</workingDirectory>
 						</configuration>
