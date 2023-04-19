@@ -24,12 +24,6 @@ import java.io.IOException;
 @Configuration
 public class AngularRouteConfiguration implements WebMvcConfigurer {
 
-    @Value("${server.port.http:8080}")
-        int httpPort;
-
-    @Value("${server.port:8443}")
-        int httpsPort;
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -45,32 +39,5 @@ public class AngularRouteConfiguration implements WebMvcConfigurer {
                 : new ClassPathResource("/static/index.html");
             }
         });
-    }
-
-    @Bean
-    public ServletWebServerFactory servletContainer() {
-        var tomcat = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-
-                var collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
-        tomcat.addAdditionalTomcatConnectors(redirectConnector());
-        return tomcat;
-    }
-
-    private Connector redirectConnector() {
-        Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-        connector.setScheme("http");
-        connector.setPort(httpPort);
-        connector.setSecure(false);
-        connector.setRedirectPort(httpsPort);
-        return connector;
     }
 }
